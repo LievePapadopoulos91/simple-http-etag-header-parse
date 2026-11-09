@@ -51,3 +51,10 @@ HTTP ETag handling is small but full of subtle rules: the weak prefix, the requi
 - `matchesIfMatch` and `matchesIfNoneMatch` accept a header string that is a comma-separated list of entity-tags, and they handle quoted commas correctly.
 - `matchesIfMatch` with a `*` header matches any non-null current entity-tag; `matchesIfNoneMatch` with a `*` header fails if a current entity-tag exists.
 - The `value` inside the quotes may contain any printable ASCII except `"`, plus obs-text (0x80–0xFF). Control characters are rejected.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
